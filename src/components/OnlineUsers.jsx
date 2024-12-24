@@ -25,7 +25,7 @@ function OnlineUsers() {
       <ul>
         {onlineUsers.map((user) => {
           return (
-            <li className="relative flex items-center">
+            <li key={user.id} className="relative flex items-center">
               <span>
                 <img src={user.photoURL} alt="" width={80} />
               </span>

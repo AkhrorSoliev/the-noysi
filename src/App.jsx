@@ -6,6 +6,9 @@ import MainLayout from "./layouts/MainLayout";
 // pages
 import { Create, Dashboard, Login, Project, Signup } from "./pages";
 
+// action
+import { action as CreateAction } from "./pages/Create";
+
 function App() {
   const routes = createBrowserRouter([
     {
@@ -19,6 +22,7 @@ function App() {
         {
           path: "/create",
           element: <Create />,
+          action: CreateAction,
         },
         {
           path: "/project/:id",
