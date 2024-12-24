@@ -3,11 +3,13 @@ import { Navbar, OnlineUsers, Sidebar } from "../components";
 
 function MainLayout() {
   return (
-    <div className="grid grid-cols-12 h-screen">
+    <div className="grid h-screen grid-cols-12">
       <Sidebar />
-      <main className="col-span-8 bg-red-50">
+      <main className="col-span-8 pb-10">
         <Navbar />
-        <Outlet />
+        <div className="align-elements">
+          <Outlet />
+        </div>
       </main>
       <OnlineUsers />
     </div>
