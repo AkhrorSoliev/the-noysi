@@ -15,3 +15,7 @@
 .active {
   @apply bg-white text-black;
 }
+
+.navlinks .active {
+  @apply link link-primary;
+}
