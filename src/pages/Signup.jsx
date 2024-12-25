@@ -1,6 +1,6 @@
 import { Form, useActionData } from "react-router-dom";
 import { FormInput, Navbar } from "../components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { validateSignupOrLoginData } from "../utils";
 
 // action
@@ -9,27 +9,79 @@ export async function action({ request }) {
   const displayName = formData.get("displayName");
   const email = formData.get("email");
   const password = formData.get("password");
-  return { displayName, email, password };
+  const confirmPassword = formData.get("confirmPassword");
+  return { displayName, email, password, confirmPassword };
 }
 
 function Signup() {
   const signupActionData = useActionData();
-  console.log(signupActionData);
+  const [error, setError] = useState({
+    displayName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   useEffect(() => {
     if (signupActionData) {
-      console.log(validateSignupOrLoginData(signupActionData, true));
+      const { valid, errors } = validateSignupOrLoginData(
+        signupActionData,
+        true,
+      );
+      if (valid) {
+        console.log("Signup successful");
+      } else {
+        setError((prev) => ({
+          ...prev,
+          ...errors,
+        }));
+      }
     }
+
+    return () => {
+      setError({
+        displayName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    };
   }, [signupActionData]);
+
   return (
     <>
       <Navbar />
       <div className="mx-auto mt-14 w-full max-w-96">
         <Form method="post" className="flex flex-col gap-3">
           <h3 className="text-3xl font-bold">Signup</h3>
-          <FormInput type="text" label="Display Name" name="displayName" />
-          <FormInput type="email" label="Email" name="email" />
-          <FormInput type="password" label="Password" name="password" />
-          <FormInput type="password" label="Confirm Password" />
+          <FormInput
+            type="text"
+            label="Display Name"
+            name="displayName"
+            error={error.displayName && "input-error"}
+            errorMessage={error.displayName}
+          />
+          <FormInput
+            type="email"
+            label="Email"
+            name="email"
+            error={error.email && "input-error"}
+            errorMessage={error.email}
+          />
+          <FormInput
+            type="password"
+            label="Password"
+            name="password"
+            error={error.password && "input-error"}
+            errorMessage={error.password}
+          />
+          <FormInput
+            type="password"
+            label="Confirm Password"
+            name="confirmPassword"
+            error={error.confirmPassword && "input-error"}
+            errorMessage={error.confirmPassword}
+          />
           <div className="flex w-full">
             <button className="btn btn-primary grow">Signup</button>
             <div className="divider divider-horizontal">OR</div>

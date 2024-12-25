@@ -1,25 +1,35 @@
+// utils.js
 export function validateSignupOrLoginData(actionData, isSignup = false) {
   if (!actionData) {
-    return { valid: false, errors: ["No data provided."] };
+    return { valid: false, errors: { general: "No data provided." } };
   }
 
-  const { displayName, email, password } = actionData;
-  const errors = [];
+  const { displayName, email, password, confirmPassword } = actionData;
+  const errors = {};
 
-  if (isSignup && (!displayName || displayName.trim().length < 3)) {
-    errors.push("Display name must be at least 3 characters long.");
+  // Signup-specific validation
+  if (isSignup) {
+    if (!displayName || displayName.trim().length < 3) {
+      errors.displayName = "Display name must be at least 3 characters long.";
+    }
+
+    if (!confirmPassword || password !== confirmPassword) {
+      errors.confirmPassword = "Passwords do not match.";
+    }
   }
 
+  // Email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email || !emailRegex.test(email)) {
-    errors.push("Invalid email address.");
+    errors.email = "Invalid email address.";
   }
 
+  // Password validation
   if (!password || password.length < 6) {
-    errors.push("Password must be at least 6 characters long.");
+    errors.password = "Password must be at least 6 characters long.";
   }
 
-  if (errors.length === 0) {
+  if (Object.keys(errors).length === 0) {
     return { valid: true };
   }
 
