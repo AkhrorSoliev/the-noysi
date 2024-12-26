@@ -3,6 +3,8 @@ import { Form, useActionData } from "react-router-dom";
 import { FormInput } from "../components";
 import { useEffect, useState } from "react";
 import { validateSignupOrLoginData } from "../utils";
+import { Button } from "../components";
+import { useLogin } from "../hooks/useLogin";
 
 // action
 export async function action({ request }) {
@@ -13,6 +15,7 @@ export async function action({ request }) {
 }
 
 function Login() {
+  const { login, isPending } = useLogin();
   const loginActionData = useActionData();
   const [error, setError] = useState({
     email: "",
@@ -21,10 +24,11 @@ function Login() {
 
   useEffect(() => {
     if (loginActionData) {
-      if (validateSignupOrLoginData(loginActionData).valid) {
-        console.log("Login successful");
+      const { valid, errors } = validateSignupOrLoginData(loginActionData);
+      if (valid) {
+        const { email, password } = loginActionData;
+        login(email, password);
       } else {
-        const { errors } = validateSignupOrLoginData(loginActionData);
         setError((prev) => ({
           ...prev,
           ...errors,
@@ -50,17 +54,19 @@ function Login() {
             label="Email"
             name="email"
             error={error.email && "input-error"}
-            errorMessage={error.emailError}
+            errorMessage={error.email}
           />
           <FormInput
             type="password"
             label="Password"
             name="password"
             error={error.password && "input-error"}
-            errorMessage={error.passwordError}
+            errorMessage={error.password}
           />
           <div className="flex w-full">
-            <button className="btn btn-primary grow">Login</button>
+            <Button loading={isPending} size="md" grow="grow">
+              Login
+            </Button>
             <div className="divider divider-horizontal">OR</div>
             <button type="button" className="btn btn-primary grow">
               Google
