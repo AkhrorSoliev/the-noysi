@@ -3,7 +3,7 @@ import { Navbar, OnlineUsers, Sidebar } from "../components";
 
 function MainLayout() {
   return (
-    <div className="grid h-screen grid-cols-12">
+    <div className="grid min-h-screen grid-cols-12">
       <Sidebar />
       <main className="col-span-8 pb-10">
         <Navbar />
