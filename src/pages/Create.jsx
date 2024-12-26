@@ -2,14 +2,19 @@ import Select from "react-select";
 import { Form, useActionData } from "react-router-dom";
 import { FormInput, FormTextArea } from "../components";
 import makeAnimated from "react-select/animated";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useCollection } from "../hooks/useCollection";
 
 const animatedComponents = makeAnimated();
 
-const optionsUsers = [
-  { value: "ahror", label: "Ahror" },
-  { value: "doniyor", label: "Doniyor" },
-  { value: "sardor", label: "Sardor" },
+const category = [
+  { value: "frontend", label: "Frotnend" },
+  { value: "backend", label: "Backend" },
+  { value: "copywriting", label: "Copywriting" },
+  { value: "design", label: "Design" },
+  { value: "marketing", label: "Marketing" },
+  { value: "management", label: "Management" },
+  { value: "other", label: "Other" },
 ];
 
 export const action = async ({ request }) => {
@@ -22,17 +27,20 @@ export const action = async ({ request }) => {
 
 function Create() {
   const actionData = useActionData();
+  const { document } = useCollection("users");
+  const [users, setUsers] = useState([]);
   const [assignedUsersList, setAssignedUsersList] = useState(null);
-  const [optionsUsers, setOptionsUsers] = useState([
-    { value: "ahror", label: "Ahror" },
-    { value: "doniyor", label: "Doniyor" },
-    { value: "sardor", label: "Sardor" },
-  ]);
-  const [category, setCategory] = useState([
-    { value: "a", label: "A" },
-    { value: "b", label: "B" },
-    { value: "c", label: "C" },
-  ]);
+
+  useEffect(() => {
+    setUsers(
+      document.map((user) => {
+        return {
+          label: user.displayName,
+          value: { ...user },
+        };
+      }),
+    );
+  }, [document]);
 
   const handleChange = (option) => {
     setAssignedUsersList(option);
@@ -50,7 +58,7 @@ function Create() {
 
         <Select
           onChange={handleChange}
-          options={optionsUsers}
+          options={users}
           components={animatedComponents}
           isMulti
         />
