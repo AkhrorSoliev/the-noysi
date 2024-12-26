@@ -2,6 +2,9 @@ import { Form, useActionData } from "react-router-dom";
 import { FormInput, Navbar } from "../components";
 import { useEffect, useState } from "react";
 import { validateSignupOrLoginData } from "../utils";
+import { Button } from "../components";
+
+import { useSignup } from "../hooks/useSignup";
 
 // action
 export async function action({ request }) {
@@ -14,6 +17,7 @@ export async function action({ request }) {
 }
 
 function Signup() {
+  const { isLoading, signup } = useSignup();
   const signupActionData = useActionData();
   const [error, setError] = useState({
     displayName: "",
@@ -29,7 +33,8 @@ function Signup() {
         true,
       );
       if (valid) {
-        console.log("Signup successful");
+        const { email, password, displayName } = signupActionData;
+        signup(email, password, displayName);
       } else {
         setError((prev) => ({
           ...prev,
@@ -83,7 +88,9 @@ function Signup() {
             errorMessage={error.confirmPassword}
           />
           <div className="flex w-full">
-            <button className="btn btn-primary grow">Signup</button>
+            <Button type="primary" size="md" loading={isLoading} grow="grow">
+              Signup
+            </Button>
             <div className="divider divider-horizontal">OR</div>
             <button type="button" className="btn btn-primary grow">
               Google

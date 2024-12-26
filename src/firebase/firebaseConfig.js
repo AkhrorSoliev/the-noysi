@@ -1,27 +1,27 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth/web-extension";
-import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD0HEsoF8HVp04q58alKnvb1hl5RjwZDeU",
-  authDomain: "uzum-91bb1.firebaseapp.com",
-  projectId: "uzum-91bb1",
-  storageBucket: "uzum-91bb1.firebasestorage.app",
-  messagingSenderId: "904049799081",
-  appId: "1:904049799081:web:d143cb2c427e82f0469eb8",
+  apiKey: "AIzaSyC-CHZaX2JQMnNhZ6cG_y461xKMGlvteT0",
+  authDomain: "task-manager-d5f23.firebaseapp.com",
+  projectId: "task-manager-d5f23",
+  storageBucket: "task-manager-d5f23.firebasestorage.app",
+  messagingSenderId: "783624832366",
+  appId: "1:783624832366:web:23c76ee0b4fb011790ad7f",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // auth
-const auth = getAuth();
+const auth = getAuth(app);
 
 // google provider for auth
 const GoogleProvider = new GoogleAuthProvider();
 
 // db
-const db = getDatabase();
+const db = getFirestore(app);
 
 export { GoogleProvider, auth, db };

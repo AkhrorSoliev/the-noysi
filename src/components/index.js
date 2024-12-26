@@ -9,3 +9,4 @@ export { default as Sidebar } from "./Sidebar";
 export { default as FormInput } from "./FormInput";
 export { default as FormTextArea } from "./FormTextarea";
 export { default as ProtectedRoutes } from "./ProtectedRoutes";
+export { default as Button } from "./Button";
