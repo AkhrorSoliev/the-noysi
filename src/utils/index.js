@@ -35,3 +35,65 @@ export function validateSignupOrLoginData(actionData, isSignup = false) {
 
   return { valid: false, errors };
 }
+
+export function validateProjectData(projectData) {
+  if (!projectData) {
+    return {
+      valid: false,
+      errors: { general: "Please provide project data." },
+    };
+  }
+
+  const { name, dueDate, details, createdBy, category, assignedUsersList } =
+    projectData;
+  const errors = {};
+
+  // Name validation
+  if (!name || name.trim().length < 3) {
+    errors.name = "Project name should be at least 3 characters long.";
+  }
+
+  // Due date validation
+  if (!dueDate || isNaN(Date.parse(dueDate))) {
+    errors.dueDate = "Please provide a valid due date.";
+  }
+
+  // Details validation
+  if (!details || details.trim().length < 10) {
+    errors.details = "Project details should be at least 10 characters long.";
+  }
+
+  // CreatedBy validation
+  if (
+    !createdBy ||
+    typeof createdBy !== "object" ||
+    !createdBy.name ||
+    !createdBy.id
+  ) {
+    errors.createdBy = "Creator information must include a valid name and ID.";
+  }
+
+  // Category validation
+  if (!category || category.trim().length < 3) {
+    errors.category = "Category should be at least 3 characters long.";
+  }
+
+  // AssignedUsersList validation
+  if (!Array.isArray(assignedUsersList) || assignedUsersList.length === 0) {
+    errors.assignedUsersList =
+      "Please assign at least one user to the project.";
+  } else {
+    assignedUsersList.forEach((user, index) => {
+      if (!user || typeof user !== "object" || !user.name || !user.id) {
+        errors[`assignedUsersList[${index}]`] =
+          "Each assigned user must have a valid name and ID.";
+      }
+    });
+  }
+
+  if (Object.keys(errors).length === 0) {
+    return { valid: true };
+  }
+
+  return { valid: false, errors };
+}

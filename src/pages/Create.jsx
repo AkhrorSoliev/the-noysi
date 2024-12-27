@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useCollection } from "../hooks/useCollection";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { Timestamp } from "firebase/firestore";
+import { validateProjectData } from "../utils";
 
 const animatedComponents = makeAnimated();
 
@@ -63,7 +64,7 @@ function Create() {
     };
 
     if (createActionData) {
-      console.log(project);
+      console.log(validateProjectData(project));
     }
   }, [createActionData]);
 
