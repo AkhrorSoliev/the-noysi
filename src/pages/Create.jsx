@@ -4,10 +4,12 @@ import { FormInput, FormTextArea } from "../components";
 import makeAnimated from "react-select/animated";
 import { useEffect, useState } from "react";
 import { useCollection } from "../hooks/useCollection";
+import { useGlobalContext } from "../hooks/useGlobalContext";
+import { Timestamp } from "firebase/firestore";
 
 const animatedComponents = makeAnimated();
 
-const category = [
+const categories = [
   { value: "frontend", label: "Frotnend" },
   { value: "backend", label: "Backend" },
   { value: "copywriting", label: "Copywriting" },
@@ -21,15 +23,17 @@ export const action = async ({ request }) => {
   const form = await request.formData();
   const name = form.get("name");
   const details = form.get("details");
-  const setDueData = form.get("dueDate");
-  return { name, details, setDueData };
+  const dueDate = form.get("dueDate");
+  return { name, details, dueDate };
 };
 
 function Create() {
-  const actionData = useActionData();
+  const { user } = useGlobalContext();
   const { document } = useCollection("users");
   const [users, setUsers] = useState([]);
   const [assignedUsersList, setAssignedUsersList] = useState(null);
+  const [category, setCategory] = useState(null);
+  const createActionData = useActionData();
 
   useEffect(() => {
     setUsers(
@@ -42,9 +46,26 @@ function Create() {
     );
   }, [document]);
 
-  const handleChange = (option) => {
-    setAssignedUsersList(option);
-  };
+  useEffect(() => {
+    const createdBy = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      id: user.uid,
+    };
+
+    const project = {
+      ...createActionData,
+      dueDate: Timestamp.fromDate(new Date(createActionData?.dueDate)),
+      createdBy,
+      category,
+      assignedUsersList,
+      comments: [],
+    };
+
+    if (createActionData) {
+      console.log(project);
+    }
+  }, [createActionData]);
 
   return (
     <div className="mt-16">
@@ -54,10 +75,13 @@ function Create() {
         <FormTextArea label="Project Details:" name="details" />
         <FormInput type="date" label="Set due data:" name="dueDate" />
         {/* ASSIGN TO */}
-        <Select options={category} />
+        <Select
+          onChange={(option) => setCategory(option)}
+          options={categories}
+        />
 
         <Select
-          onChange={handleChange}
+          onChange={(option) => setAssignedUsersList(option)}
           options={users}
           components={animatedComponents}
           isMulti
