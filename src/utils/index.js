@@ -53,7 +53,11 @@ export function validateProjectData(projectData) {
   }
 
   // Due date validation
-  if (!dueDate || isNaN(Date.parse(dueDate))) {
+  if (
+    !dueDate ||
+    typeof dueDate.seconds !== "number" ||
+    typeof dueDate.nanoseconds !== "number"
+  ) {
     errors.dueDate = "Please provide a valid due date.";
   }
 
@@ -63,7 +67,7 @@ export function validateProjectData(projectData) {
   }
 
   // Category validation
-  if (!category || category.trim().length < 3) {
+  if (!category || category.value < 3) {
     errors.category = "Category should be at least 3 characters long.";
   }
 
@@ -71,13 +75,6 @@ export function validateProjectData(projectData) {
   if (!Array.isArray(assignedUsersList) || assignedUsersList.length === 0) {
     errors.assignedUsersList =
       "Please assign at least one user to the project.";
-  } else {
-    assignedUsersList.forEach((user, index) => {
-      if (!user || typeof user !== "object" || !user.name || !user.id) {
-        errors[`assignedUsersList[${index}]`] =
-          "Each assigned user must have a valid name and ID.";
-      }
-    });
   }
 
   if (Object.keys(errors).length === 0) {
