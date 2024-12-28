@@ -1,12 +1,15 @@
 import Select from "react-select";
-import { Form, useActionData } from "react-router-dom";
+import { Form, useActionData, useNavigate } from "react-router-dom";
 import { FormInput, FormTextArea } from "../components";
-import makeAnimated from "react-select/animated";
 import { useEffect, useState } from "react";
 import { useCollection } from "../hooks/useCollection";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { Timestamp } from "firebase/firestore";
 import { validateProjectData } from "../utils";
+import { useFirestore } from "../hooks/useFirestore";
+
+import makeAnimated from "react-select/animated";
+import toast from "react-hot-toast";
 
 const animatedComponents = makeAnimated();
 
@@ -29,12 +32,14 @@ export const action = async ({ request }) => {
 };
 
 function Create() {
+  const navigate = useNavigate();
   const { user } = useGlobalContext();
   const { document } = useCollection("users");
   const [users, setUsers] = useState([]);
   const [assignedUsersList, setAssignedUsersList] = useState(null);
   const [category, setCategory] = useState(null);
   const [error, setError] = useState({});
+  const { addDocument, response } = useFirestore("projects");
   const createActionData = useActionData();
 
   useEffect(() => {
@@ -67,13 +72,20 @@ function Create() {
     if (createActionData) {
       const { valid, errors } = validateProjectData(project);
       if (valid) {
-        console.log(project);
+        addDocument(project)
+          .then(() => {
+            toast.success("Project created successfully");
+            navigate("/");
+          })
+          .catch((error) => {
+            toast.error(error.code);
+          });
       } else {
         setError(errors);
       }
     }
   }, [createActionData]);
-  console.log(error.assignedUsersList);
+
   return (
     <div className="mt-16">
       <h2 className="mb-10 text-3xl font-medium">Create a new Project</h2>
