@@ -44,8 +44,7 @@ export function validateProjectData(projectData) {
     };
   }
 
-  const { name, dueDate, details, createdBy, category, assignedUsersList } =
-    projectData;
+  const { name, dueDate, details, category, assignedUsersList } = projectData;
   const errors = {};
 
   // Name validation
@@ -61,16 +60,6 @@ export function validateProjectData(projectData) {
   // Details validation
   if (!details || details.trim().length < 10) {
     errors.details = "Project details should be at least 10 characters long.";
-  }
-
-  // CreatedBy validation
-  if (
-    !createdBy ||
-    typeof createdBy !== "object" ||
-    !createdBy.name ||
-    !createdBy.id
-  ) {
-    errors.createdBy = "Creator information must include a valid name and ID.";
   }
 
   // Category validation

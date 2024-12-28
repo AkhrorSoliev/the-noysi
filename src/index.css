@@ -10,6 +10,11 @@
   .nav-item {
     @apply flex items-center gap-1 rounded-l-3xl px-2 py-2 text-xl text-white transition duration-300;
   }
+
+  .react-select-container .react-select__control,
+  .react-select-container .react-select__control:hover {
+    @apply input-error;
+  }
 }
 
 .active {
