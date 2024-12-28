@@ -34,6 +34,7 @@ function Create() {
   const [users, setUsers] = useState([]);
   const [assignedUsersList, setAssignedUsersList] = useState(null);
   const [category, setCategory] = useState(null);
+  const [error, setError] = useState({});
   const createActionData = useActionData();
 
   useEffect(() => {
@@ -64,27 +65,57 @@ function Create() {
     };
 
     if (createActionData) {
-      console.log(validateProjectData(project));
+      const { valid, errors } = validateProjectData(project);
+      if (valid) {
+        console.log(project);
+      } else {
+        setError(errors);
+      }
     }
   }, [createActionData]);
-
+  console.log(error.assignedUsersList);
   return (
     <div className="mt-16">
       <h2 className="mb-10 text-3xl font-medium">Create a new Project</h2>
       <Form method="post" className="flex w-full max-w-[500px] flex-col gap-8">
-        <FormInput type="text" label="Project Name:" name="name" />
-        <FormTextArea label="Project Details:" name="details" />
-        <FormInput type="date" label="Set due data:" name="dueDate" />
+        <FormInput
+          type="text"
+          label="Project Name:"
+          name="name"
+          error={error.name && "input-error"}
+          errorMessage={error.name}
+        />
+        <FormTextArea
+          label="Project Details:"
+          name="details"
+          error={error.details && "textarea-error"}
+          errorMessage={error.details}
+        />
+        <FormInput
+          type="date"
+          label="Set due data:"
+          name="dueDate"
+          error={error.dueDate && "input-error"}
+          errorMessage={error.dueDate}
+        />
         {/* ASSIGN TO */}
         <Select
           onChange={(option) => setCategory(option)}
           options={categories}
+          className={!category && error.category && "react-select-container"}
+          classNamePrefix="react-select"
         />
 
         <Select
           onChange={(option) => setAssignedUsersList(option)}
           options={users}
           components={animatedComponents}
+          className={
+            !assignedUsersList &&
+            error.assignedUsersList &&
+            "react-select-container"
+          }
+          classNamePrefix="react-select"
           isMulti
         />
 
