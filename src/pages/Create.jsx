@@ -39,9 +39,9 @@ function Create() {
   const [assignedUsersList, setAssignedUsersList] = useState(null);
   const [category, setCategory] = useState(null);
   const [error, setError] = useState({});
-  const { addDocument, response } = useFirestore("projects");
+  const { addDocument } = useFirestore("projects");
   const createActionData = useActionData();
-  console.log(assignedUsersList);
+
   useEffect(() => {
     setUsers(
       document.map((user) => {
