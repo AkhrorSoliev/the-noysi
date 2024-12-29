@@ -5,7 +5,6 @@ import { ProjectComment, ProjectSummary } from "../components";
 function Project() {
   const { id } = useParams();
   const { document, error } = useDocument("projects", id);
-  console.log(document);
   if (error) {
     return <div className="error">{error}</div>;
   }
@@ -15,7 +14,7 @@ function Project() {
   }
 
   return (
-    <div className="mt-16 grid grid-cols-2 gap-4">
+    <div className="mt-16 flex items-start gap-5">
       <ProjectSummary project={document} />
       <ProjectComment project={document} />
     </div>

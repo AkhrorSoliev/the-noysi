@@ -1,7 +1,7 @@
 function ProjectSummary({ project }) {
   const { name, createdBy, dueDate, details, assignedUsersList } = project;
   return (
-    <div className="h-full rounded-md bg-white p-5">
+    <div className="w-1/2 rounded-md bg-white p-5">
       <h5 className="mb-1 text-xl font-semibold">{name}</h5>
       <p className="mb-1 text-sm italic text-neutral text-opacity-60">
         By {createdBy.displayName}
