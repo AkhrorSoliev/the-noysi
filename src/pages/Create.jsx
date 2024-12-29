@@ -41,13 +41,13 @@ function Create() {
   const [error, setError] = useState({});
   const { addDocument, response } = useFirestore("projects");
   const createActionData = useActionData();
-
+  console.log(assignedUsersList);
   useEffect(() => {
     setUsers(
       document.map((user) => {
         return {
           label: user.displayName,
-          value: { ...user },
+          value: { ...user, id: user.id },
         };
       }),
     );
@@ -65,7 +65,7 @@ function Create() {
       dueDate: Timestamp.fromDate(new Date(createActionData?.dueDate)),
       createdBy,
       category,
-      assignedUsersList,
+      assignedUsersList: assignedUsersList?.map((user) => user.value),
       comments: [],
     };
 
