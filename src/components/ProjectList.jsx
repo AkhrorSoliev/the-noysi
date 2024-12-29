@@ -11,7 +11,9 @@ function ProjectList({ projects }) {
             <Link key={project.id} to={`/project/${project.id}`}>
               <div className="tranistion-all card w-full bg-base-100 shadow-xl duration-300 hover:shadow-2xl">
                 <div className="card-body p-5">
-                  <h3 className="mb-4 text-2xl font-semibold">{name}</h3>
+                  <h3 className="mb-4 line-clamp-1 text-2xl font-semibold">
+                    {name}
+                  </h3>
                   <p className="mb-2 text-neutral-content">
                     Due by: {dueDate.toDate().toDateString()}
                   </p>

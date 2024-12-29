@@ -83,3 +83,32 @@ export function validateProjectData(projectData) {
 
   return { valid: false, errors };
 }
+
+export function formatCommentTime(commentTime) {
+  const date = new Date(
+    commentTime.seconds * 1000 + Math.floor(commentTime.nanoseconds / 1e6),
+  );
+  const now = new Date();
+
+  const timeDiff = now - date;
+  const oneDay = 24 * 60 * 60 * 1000;
+
+  if (timeDiff < oneDay && now.getDate() === date.getDate()) {
+    return {
+      day: "Today",
+      hour: `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`,
+    };
+  }
+
+  if (timeDiff < 2 * oneDay && now.getDate() - date.getDate() === 1) {
+    return {
+      day: "Yesterday",
+      hour: `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`,
+    };
+  }
+
+  return {
+    day: `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1).toString().padStart(2, "0")}.${date.getFullYear()}`,
+    hour: `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`,
+  };
+}
