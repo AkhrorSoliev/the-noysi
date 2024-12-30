@@ -6,7 +6,7 @@ const Button = ({
   grow = "grow-0", //
   outline = false,
   loading = false,
-  buttonType = "suubmit",
+  buttonType = "submit",
   children,
   ...props
 }) => {
@@ -18,8 +18,8 @@ const Button = ({
     <button
       disabled={loading}
       className={`${baseClass} ${typeClass} ${sizeClass} ${grow}`}
-      {...props}
       type={buttonType}
+      {...props}
     >
       {loading ? "Loading..." : children}
     </button>
@@ -27,8 +27,3 @@ const Button = ({
 };
 
 export default Button;
-
-// Usage Example:
-// <Button type="primary" size="sm">Primary Small</Button>
-// <Button type="secondary" size="md" outline>Secondary Outline</Button>
-// <Button type="warning" size="lg" loading>Warning Large</Button>
