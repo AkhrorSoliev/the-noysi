@@ -45,7 +45,6 @@ export function validateProjectData(projectData) {
   }
 
   const { name, dueDate, details, category, assignedUsersList } = projectData;
-  console.log(dueDate);
   const errors = {};
 
   // Name validation

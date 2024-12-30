@@ -29,7 +29,14 @@ function AddComment({ project, user, id }) {
       comments: [...project.comments, commentToAdd],
     });
     setComment("");
-    setError(true);
+    setError(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
   };
 
   return (
@@ -42,6 +49,7 @@ function AddComment({ project, user, id }) {
               setComment(e.target.value);
               setError(false);
             }}
+            onKeyDown={handleKeyDown}
             value={comment}
             className={`textarea textarea-bordered w-full ${error && "textarea-error"}`}
             placeholder="Type your comment here..."
