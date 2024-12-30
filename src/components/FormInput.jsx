@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function FormInput({ type, label, name, error, errorMessage }) {
+function FormInput({ type, label, name, error, errorMessage, ...props }) {
   const [text, setText] = useState("");
 
   return (
@@ -14,6 +14,7 @@ function FormInput({ type, label, name, error, errorMessage }) {
         className={`input input-bordered w-full ${text.length < 3 && error}`}
         name={name}
         onChange={(e) => setText(e.target.value)}
+        {...props}
       />
       {text.length < 3 && error && (
         <span className="label-text-alt text-error">

@@ -1,13 +1,12 @@
 import Select from "react-select";
 import { Form, useActionData, useNavigate } from "react-router-dom";
-import { FormInput, FormTextArea } from "../components";
+import { FormInput, FormTextArea, FormCheckbox } from "../components";
 import { useEffect, useState } from "react";
 import { useCollection } from "../hooks/useCollection";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { Timestamp } from "firebase/firestore";
 import { validateProjectData } from "../utils";
 import { useFirestore } from "../hooks/useFirestore";
-
 import makeAnimated from "react-select/animated";
 import toast from "react-hot-toast";
 
@@ -33,14 +32,16 @@ export const action = async ({ request }) => {
 
 function Create() {
   const navigate = useNavigate();
+  const createActionData = useActionData();
   const { user } = useGlobalContext();
   const { document } = useCollection("users");
+  const { addDocument } = useFirestore("projects");
   const [users, setUsers] = useState([]);
   const [assignedUsersList, setAssignedUsersList] = useState(null);
   const [category, setCategory] = useState(null);
   const [error, setError] = useState({});
-  const { addDocument } = useFirestore("projects");
-  const createActionData = useActionData();
+  const [commentAccess, setCommentAccess] = useState(true);
+  const [readComments, setReadComments] = useState(true);
 
   useEffect(() => {
     setUsers(
@@ -66,6 +67,9 @@ function Create() {
       createdBy,
       category: category?.value,
       assignedUsersList: assignedUsersList?.map((user) => user.value),
+      completed: false,
+      readComments,
+      commentAccess,
       comments: [],
     };
 
@@ -112,24 +116,50 @@ function Create() {
           errorMessage={error.dueDate}
         />
         {/* ASSIGN TO */}
-        <Select
-          onChange={(option) => setCategory(option)}
-          options={categories}
-          className={!category && error.category && "react-select-container"}
-          classNamePrefix="react-select"
+        <div>
+          <div className="label">
+            <span className="label-text">
+              Select a category for this project:
+            </span>
+          </div>
+          <Select
+            onChange={(option) => setCategory(option)}
+            options={categories}
+            className={!category && error.category && "react-select-container"}
+            classNamePrefix="react-select"
+          />
+        </div>
+
+        <div>
+          <div className="label">
+            <span className="label-text">
+              Select users to assign to this project:
+            </span>
+          </div>
+          <Select
+            onChange={(option) => setAssignedUsersList(option)}
+            options={users}
+            components={animatedComponents}
+            className={
+              !assignedUsersList &&
+              error.assignedUsersList &&
+              "react-select-container"
+            }
+            classNamePrefix="react-select"
+            isMulti
+          />
+        </div>
+
+        <FormCheckbox
+          label="Only assigned users can write comments:"
+          checked={commentAccess}
+          onChange={() => setCommentAccess(!commentAccess)}
         />
 
-        <Select
-          onChange={(option) => setAssignedUsersList(option)}
-          options={users}
-          components={animatedComponents}
-          className={
-            !assignedUsersList &&
-            error.assignedUsersList &&
-            "react-select-container"
-          }
-          classNamePrefix="react-select"
-          isMulti
+        <FormCheckbox
+          label="Do you allow unregistered users to read comments as well?"
+          checked={readComments}
+          onChange={() => setReadComments(!readComments)}
         />
 
         <div className="flex justify-end">

@@ -6,6 +6,7 @@ import { useGlobalContext } from "../hooks/useGlobalContext";
 function Dashboard() {
   const { document } = useCollection("projects");
   const { user } = useGlobalContext();
+  console.log(user);
   const [filter, setFilter] = useState("all");
 
   const changeFilter = (newFilter) => {
@@ -38,6 +39,7 @@ function Dashboard() {
         }
       })
     : null;
+
   return (
     <div className="mt-16">
       <h2 className="mb-10 text-3xl font-medium">Dashboard</h2>

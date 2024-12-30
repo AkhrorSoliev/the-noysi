@@ -6,19 +6,20 @@ const Button = ({
   grow = "grow-0", //
   outline = false,
   loading = false,
+  buttonType = "suubmit",
   children,
   ...props
 }) => {
   const baseClass = "btn";
   const typeClass = outline ? `btn-outline btn-${type}` : `btn-${type}`;
   const sizeClass = `btn-${size}`;
-  const loadingClass = loading ? "loading" : "";
 
   return (
     <button
       disabled={loading}
       className={`${baseClass} ${typeClass} ${sizeClass} ${grow}`}
       {...props}
+      type={buttonType}
     >
       {loading ? "Loading..." : children}
     </button>

@@ -1,4 +1,10 @@
-import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  updateDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { useEffect, useReducer, useState } from "react";
 import { db } from "../firebase/firebaseConfig";
 
@@ -76,9 +82,21 @@ export function useFirestore(collectionName) {
     }
   };
 
+  const deledeleteDocument = async (id) => {
+    dispatch({ type: "IS_PENDING" });
+    const docRef = doc(db, collectionName, id);
+    try {
+      await deleteDoc(docRef);
+      dispatchIfNotCancelled({ type: "DELETED_DOCUMENT" });
+    } catch (error) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: error });
+      return null;
+    }
+  };
+
   useEffect(() => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { addDocument, updateDocument, response };
+  return { addDocument, updateDocument, deledeleteDocument, response };
 }
