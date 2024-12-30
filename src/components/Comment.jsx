@@ -12,6 +12,14 @@ function Comment({ comments, user }) {
     scrollToBottom();
   }, [comments]);
 
+  if (!comments.length) {
+    return (
+      <p className="my-10 text-center text-sm italic opacity-40">
+        No comments yet
+      </p>
+    );
+  }
+
   return (
     <div className="mb-10 max-h-[500px] overflow-y-auto pr-2">
       {comments.map((comment) => {
