@@ -45,6 +45,7 @@ export function validateProjectData(projectData) {
   }
 
   const { name, dueDate, details, category, assignedUsersList } = projectData;
+  console.log(dueDate);
   const errors = {};
 
   // Name validation
@@ -53,11 +54,7 @@ export function validateProjectData(projectData) {
   }
 
   // Due date validation
-  if (
-    !dueDate ||
-    typeof dueDate.seconds !== "number" ||
-    typeof dueDate.nanoseconds !== "number"
-  ) {
+  if (!dueDate || isNaN(dueDate.seconds) || isNaN(dueDate.nanoseconds)) {
     errors.dueDate = "Please provide a valid due date.";
   }
 

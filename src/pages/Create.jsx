@@ -64,13 +64,14 @@ function Create() {
       ...createActionData,
       dueDate: Timestamp.fromDate(new Date(createActionData?.dueDate)),
       createdBy,
-      category,
+      category: category?.value,
       assignedUsersList: assignedUsersList?.map((user) => user.value),
       comments: [],
     };
 
     if (createActionData) {
       const { valid, errors } = validateProjectData(project);
+
       if (valid) {
         addDocument(project)
           .then(() => {
