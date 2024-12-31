@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { validateSignupOrLoginData } from "../utils";
 import { Button } from "../components";
 import { useLogin } from "../hooks/useLogin";
+import { useGoogle } from "../hooks/useGoogle";
 
 // action
 export async function action({ request }) {
@@ -15,7 +16,8 @@ export async function action({ request }) {
 }
 
 function Login() {
-  const { login, isPending } = useLogin();
+  const { isPending, withGoogle } = useGoogle();
+  const { login, isLoading } = useLogin();
   const loginActionData = useActionData();
   const [error, setError] = useState({
     email: "",
@@ -64,13 +66,18 @@ function Login() {
             errorMessage={error.password}
           />
           <div className="flex w-full">
-            <Button loading={isPending} size="md" grow="grow">
+            <Button loading={isLoading} size="md" grow="grow">
               Login
             </Button>
             <div className="divider divider-horizontal">OR</div>
-            <button type="button" className="btn btn-primary grow">
+            <Button
+              onClick={withGoogle}
+              loading={isPending}
+              type="button"
+              className="btn btn-primary grow"
+            >
               Google
-            </button>
+            </Button>
           </div>
         </Form>
       </div>

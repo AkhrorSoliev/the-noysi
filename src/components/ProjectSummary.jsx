@@ -2,17 +2,12 @@ import Button from "./Button";
 import { useFirestore } from "../hooks/useFirestore";
 import toast from "react-hot-toast";
 import Modal from "./Modal";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 
 function ProjectSummary({ project }) {
+  const { user } = useGlobalContext();
   const { updateDocument } = useFirestore("projects");
-  const {
-    name,
-    createdBy,
-    dueDate,
-    details,
-    assignedUsersList,
-    commentAccess,
-  } = project;
+  const { name, createdBy, dueDate, details, assignedUsersList } = project;
 
   const makeCopleted = async () => {
     await updateDocument(project.id, {
@@ -27,12 +22,12 @@ function ProjectSummary({ project }) {
     <>
       <Modal project={project} />
       <div className="w-1/2">
-        <div className="mb-5 rounded-md bg-white p-5">
+        <div className="mb-5 rounded-md bg-base-100 p-5">
           <h5 className="mb-1 text-xl font-semibold">{name}</h5>
-          <p className="mb-1 text-sm italic text-neutral text-opacity-60">
+          <p className="mb-1 text-sm italic text-neutral-content">
             By {createdBy.displayName}
           </p>
-          <p className="mb-10 text-sm text-neutral text-opacity-60">
+          <p className="mb-10 text-sm text-neutral-content">
             Project due by {dueDate.toDate().toDateString()}
           </p>
           <p className="mb-5 text-base-content">{details}</p>
@@ -56,7 +51,7 @@ function ProjectSummary({ project }) {
           </div>
         </div>
         <div className="flex w-full items-center justify-between gap-5">
-          {commentAccess && (
+          {user?.uid === createdBy.id && (
             <>
               <Button
                 onClick={makeCopleted}

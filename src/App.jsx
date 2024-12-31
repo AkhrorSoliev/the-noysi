@@ -15,6 +15,7 @@ import { Create, Dashboard, Login, Project, Signup, Profile } from "./pages";
 import { action as CreateAction } from "./pages/Create";
 import { action as LoginAction } from "./pages/Login";
 import { action as SignupAction } from "./pages/Signup";
+import { action as ProfileAction } from "./pages/Profile";
 
 // hooks
 import { useGlobalContext } from "./hooks/useGlobalContext";
@@ -46,6 +47,7 @@ function App() {
         {
           path: "/profile",
           element: <Profile />,
+          action: ProfileAction,
         },
       ],
     },
