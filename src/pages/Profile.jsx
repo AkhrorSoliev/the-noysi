@@ -1,21 +1,31 @@
+import toast from "react-hot-toast";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import { MdOutlinePhotoCamera, MdDoneOutline } from "react-icons/md";
 import { Button, FormInput } from "../components";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUpdateUser } from "../hooks/updateProfile";
-import toast from "react-hot-toast";
+import { Form, useActionData } from "react-router-dom";
+import { useVerifyEmail } from "../hooks/useVerifyEmail";
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const displayName = formData.get("displayName");
+  const email = formData.get("email");
+  return { displayName, email };
+}
 
 function Profile() {
+  const profileActionData = useActionData();
   const {
     user: { displayName, email, photoURL, emailVerified },
   } = useGlobalContext();
 
   const { updateUserProfile, isPending } = useUpdateUser();
+  const { verifyEmail, isPending: _isPending } = useVerifyEmail();
+  const [profileImage, setProfileImage] = useState(photoURL);
+
   const fileInputRef = useRef();
   const formRef = useRef();
-  const [profileImage, setProfileImage] = useState(photoURL);
-  const [userEmail, setUserEmail] = useState(email);
-  const [userDisplayName, setUserDisplayName] = useState(displayName);
 
   const handleImage = () => {
     fileInputRef.current.click();
@@ -35,23 +45,17 @@ function Profile() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (
-      userEmail === email ||
-      userDisplayName === displayName ||
-      photoURL == profileImage
-    ) {
-      toast.error("No changes made");
-      return;
-    } else {
-      await updateUserProfile(userDisplayName, formRef.current, userEmail);
+  useEffect(() => {
+    if (profileActionData) {
+      profileImage == photoURL
+        ? updateUserProfile(profileActionData.displayName, false)
+        : updateUserProfile(profileActionData.displayName, formRef.current);
+      formRef.current.reset();
     }
-  };
+  }, [profileActionData]);
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="mt-16">
+    <Form method="post" ref={formRef} className="mt-16">
       <h1 className="mb-10 text-center text-3xl font-semibold capitalize">
         Profile Settings
       </h1>
@@ -84,28 +88,31 @@ function Profile() {
       </div>
       <div className="mb-10 grid w-full grid-cols-2 items-end gap-5">
         <FormInput
-          onChange={(e) => setUserDisplayName(e.target.value)}
           label="Name"
           type="search"
-          value={userDisplayName}
+          val={displayName}
+          name="displayName"
+          required
         />
-        <FormInput
-          onChange={(e) => setUserEmail(e.target.value)}
-          label="Email"
-          type="search"
-          value={userEmail}
-        />
+
         <div className="flex flex-col">
           <div className="label">
             <span className="label-text">Email Status</span>
           </div>
           {!emailVerified ? (
-            <div className="profile-input-card">
-              <p>
-                Email is not verified. Please verify your email. Click button to
-                send verification email.
-              </p>
-              <Button buttonType="button">Send</Button>
+            <div className="flex items-center gap-2">
+              <div className="profile-input-card w-full">
+                <p>{email} is not verified.</p>
+              </div>
+              <div>
+                <Button
+                  onClick={verifyEmail}
+                  loading={_isPending}
+                  buttonType="button"
+                >
+                  Send
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="profile-input-card">
@@ -115,12 +122,12 @@ function Profile() {
           )}
         </div>
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-center">
         <Button type="primary" loading={isPending}>
           Save
         </Button>
       </div>
-    </form>
+    </Form>
   );
 }
 

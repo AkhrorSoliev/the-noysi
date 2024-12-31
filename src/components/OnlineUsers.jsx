@@ -3,8 +3,12 @@ import { useCollection } from "../hooks/useCollection";
 function OnlineUsers() {
   const { document } = useCollection("users");
 
+  if (!document) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="col-span-2 bg-secondary-content px-5 py-10">
+    <div className="col-span-2 bg-base-200 px-5 py-10">
       <ul className="flex flex-col gap-4">
         {document &&
           document.map((user) => {
@@ -18,7 +22,7 @@ function OnlineUsers() {
                 <img
                   src={user.photoURL}
                   alt={user.displayName}
-                  className="h-10 w-10 rounded-full"
+                  className="h-10 w-10 rounded-full object-cover"
                 />
                 <span>{user.displayName}</span>
               </li>

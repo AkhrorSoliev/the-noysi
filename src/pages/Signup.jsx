@@ -5,6 +5,7 @@ import { validateSignupOrLoginData } from "../utils";
 import { Button } from "../components";
 
 import { useSignup } from "../hooks/useSignup";
+import { useGoogle } from "../hooks/useGoogle";
 
 // action
 export async function action({ request }) {
@@ -17,6 +18,7 @@ export async function action({ request }) {
 }
 
 function Signup() {
+  const { isPending, withGoogle } = useGoogle();
   const { isLoading, signup } = useSignup();
   const signupActionData = useActionData();
   const [error, setError] = useState({
@@ -92,9 +94,15 @@ function Signup() {
               Signup
             </Button>
             <div className="divider divider-horizontal">OR</div>
-            <button type="button" className="btn btn-primary grow">
+            <Button
+              type="secondary"
+              onClick={withGoogle}
+              loading={isPending}
+              buttonType="button"
+              className="btn btn-primary grow"
+            >
               Google
-            </button>
+            </Button>
           </div>
         </Form>
       </div>

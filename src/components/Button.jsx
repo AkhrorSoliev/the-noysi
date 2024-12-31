@@ -1,23 +1,23 @@
 import React from "react";
 
 const Button = ({
-  type = "primary", // primary, secondary, info, warning, error
-  size = "md", // sm, md, lg
+  type = "primary",
+  size = "md",
   grow = "grow-0", //
   outline = false,
   loading = false,
   buttonType = "submit",
+  disabled = false,
   children,
   ...props
 }) => {
-  const baseClass = "btn";
   const typeClass = outline ? `btn-outline btn-${type}` : `btn-${type}`;
   const sizeClass = `btn-${size}`;
 
   return (
     <button
-      disabled={loading}
-      className={`${baseClass} ${typeClass} ${sizeClass} ${grow}`}
+      disabled={loading || disabled}
+      className={`btn ${type} ${typeClass} ${sizeClass} ${grow}`}
       type={buttonType}
       {...props}
     >

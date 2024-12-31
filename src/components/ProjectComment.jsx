@@ -1,41 +1,66 @@
 import { useGlobalContext } from "../hooks/useGlobalContext";
 import Comment from "./Comment";
 import AddComment from "./AddComment";
+import { useEffect, useState } from "react";
 
 function ProjectComment({ project }) {
-  const { completed, comments, commentAccess } = project;
+  const [allowComment, setAllowComment] = useState(false);
+  const [showComment, setShowComment] = useState(false);
 
+  const {
+    completed,
+    comments,
+    commentAccess,
+    createdBy,
+    readComments,
+    assignedUsersList,
+  } = project;
   const { user } = useGlobalContext();
 
-  if (!commentAccess) {
-    return (
-      <div className="grid h-[500px] w-1/2 place-items-center py-5">
-        <h4 className="mb-4 text-center text-xl font-semibold opacity-50">
-          Project Creator gives access to comment on this project only assigned
-          users.
-          <br />
-          <br />
-          You can only read project.
-        </h4>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (
+      commentAccess ||
+      user.uid == createdBy.id ||
+      assignedUsersList.find((u) => u.id == user.uid)
+    ) {
+      setAllowComment(true);
+    }
+
+    if (
+      readComments ||
+      assignedUsersList.find((u) => u.id == user.uid) ||
+      user.uid == createdBy.id
+    ) {
+      setShowComment(true);
+    }
+  }, [commentAccess, user, createdBy, assignedUsersList]);
 
   return (
     <div className="w-1/2 py-5">
-      <h4 className="mb-4 text-xl font-medium">Project Comments:</h4>
-      <div className={`${!completed && "opacity-50"}`}>
-        <Comment comments={comments} user={user} />
-      </div>
-      {!completed ? (
-        <AddComment project={project} user={user} />
-      ) : (
-        <div>
-          <p className="text-center text-xl text-gray-500">
-            If you want to add a comment, please uncomplete the project first.
-            Thank you!
-          </p>
-        </div>
+      {showComment && allowComment && (
+        <h4 className="mb-4 text-xl font-medium">Project Comments:</h4>
+      )}
+      {showComment && <Comment comments={comments} user={user} />}
+
+      {allowComment && <AddComment project={project} user={user} />}
+
+      {showComment && !allowComment && (
+        <p className="text-center text-xl text-gray-500">
+          You can only read comments on this project.
+        </p>
+      )}
+
+      {!showComment && !allowComment && (
+        <p className="text-center text-xl text-gray-500">
+          You can only read this project.
+        </p>
+      )}
+
+      {completed && (
+        <p className="text-center text-xl text-gray-500">
+          To add comments, please mark the project as incomplete first. Thank
+          you!
+        </p>
       )}
     </div>
   );

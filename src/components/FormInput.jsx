@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 
-function FormInput({ type, label, name, error, errorMessage, ...props }) {
+function FormInput({ type, label, name, error, errorMessage, val, ...props }) {
   const [text, setText] = useState("");
+
+  useEffect(() => {
+    if (val) setText(val);
+  }, [val]);
 
   return (
     <label className="form-control w-full">
@@ -10,10 +14,11 @@ function FormInput({ type, label, name, error, errorMessage, ...props }) {
       </div>
       <input
         type={type}
-        placeholder="Type here"
-        className={`input input-bordered w-full ${text.length < 3 && error}`}
         name={name}
+        placeholder="Type here"
+        className={`input input-bordered w-full ${text.length < 3 && error} `}
         onChange={(e) => setText(e.target.value)}
+        value={text}
         {...props}
       />
       {text.length < 3 && error && (

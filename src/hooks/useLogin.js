@@ -6,13 +6,13 @@ import { auth, db } from "../firebase/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 
 export function useLogin() {
-  const [isPending, setIsPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isCancelled, setIsCancelled] = useState(false);
   const { dispatch } = useGlobalContext();
 
   const login = async (email, password) => {
-    setIsPending(true);
+    setIsLoading(true);
     setError(null);
 
     try {
@@ -27,7 +27,7 @@ export function useLogin() {
       }
 
       if (!isCancelled) {
-        setIsPending(false);
+        setIsLoading(false);
         setError(null);
       }
       dispatch({ type: "LOGIN", payload: res.user });
@@ -35,7 +35,7 @@ export function useLogin() {
     } catch (err) {
       if (!isCancelled) {
         setError(err.message);
-        setIsPending(false);
+        setIsLoading(false);
       }
       toast.error("Could not log you in");
     }
@@ -45,5 +45,5 @@ export function useLogin() {
     return () => setIsCancelled(true);
   }, []);
 
-  return { login, isPending, error };
+  return { login, isLoading, error };
 }

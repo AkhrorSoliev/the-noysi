@@ -120,7 +120,7 @@
   }
 
   .nav-item {
-    @apply flex items-center gap-1 rounded-l-3xl px-2 py-2 text-xl text-white transition duration-300;
+    @apply flex items-center gap-1 rounded-l-3xl px-2 py-2 text-xl transition duration-300;
   }
 
   .react-select-container .react-select__control,
@@ -129,14 +129,23 @@
   }
 
   .profile-input-card {
-    @apply flex items-center justify-between gap-2 rounded-md border bg-white p-2 py-3;
+    @apply flex items-center justify-between gap-2 rounded-md border border-base-200 bg-base-100 p-2 py-3;
   }
 }
 
-.active {
-  @apply bg-base-200 text-black;
+:root {
+  --black-color: #fff;
 }
 
-.navlinks .active {
-  @apply link link-primary;
+.dark {
+  --white-color: #000;
+}
+
+body.dark .react-select__control {
+  background-color: transparent !important;
+  color: var(--black-color);
+}
+
+body.dark .react-select__single-value {
+  color: var(--black-color) !important;
 }

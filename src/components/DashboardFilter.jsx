@@ -16,12 +16,12 @@ function DashboardFilter({ changeFilter }) {
   const [currentFilter, setCurrentFilter] = useState("All");
 
   return (
-    <div role="tablist" className="tabs tabs-lifted">
+    <div role="tablist" className="tabs tabs-bordered">
       {filterList.map((filter) => (
         <button
           key={filter}
           role="tab"
-          className={`tab ${currentFilter === filter ? "tab-active" : ""}`}
+          className={`tab ${currentFilter === filter ? "tab-active bg-base-300" : ""}`}
           onClick={() => {
             setCurrentFilter(filter);
             changeFilter(filter.toLowerCase());

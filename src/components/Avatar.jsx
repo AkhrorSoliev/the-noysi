@@ -1,4 +1,5 @@
 function Avatar({ user }) {
+  console.log(user);
   return (
     <div className="mb-10 flex flex-col items-center border-b py-10">
       <img
@@ -6,7 +7,7 @@ function Avatar({ user }) {
         src={user.photoURL}
         alt="user avatar"
       />
-      <h3 className="text-xl font-semibold text-white">
+      <h3 className="primary-content text-xl font-semibold">
         Hello, {user.displayName}
       </h3>
     </div>
