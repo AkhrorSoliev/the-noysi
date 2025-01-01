@@ -9,7 +9,15 @@ import { ProtectedRoutes } from "./components";
 import MainLayout from "./layouts/MainLayout";
 
 // pages
-import { Create, Dashboard, Login, Project, Signup, Profile } from "./pages";
+import {
+  Create,
+  Dashboard,
+  Login,
+  Project,
+  Signup,
+  Profile,
+  User,
+} from "./pages";
 
 // action
 import { action as CreateAction } from "./pages/Create";
@@ -48,6 +56,10 @@ function App() {
           path: "/profile",
           element: <Profile />,
           action: ProfileAction,
+        },
+        {
+          path: "/user/:id",
+          element: <User />,
         },
       ],
     },

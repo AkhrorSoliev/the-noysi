@@ -70,7 +70,7 @@ export function useFirestore(collectionName) {
 
   const updateDocument = async (id, _doc) => {
     dispatch({ type: "IS_PENDING" });
-
+    console.log(id, _doc);
     const docRef = doc(db, collectionName, id);
 
     try {

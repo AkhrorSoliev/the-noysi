@@ -16,9 +16,9 @@ export function useLogout() {
     setError(null);
 
     try {
-      await updateDoc(doc(db, "users", auth.currentUser.uid), {
-        online: false,
-      });
+      // await updateDoc(doc(db, "users", auth.currentUser.uid), {
+      //   online: false,
+      // });
 
       await signOut(auth);
       toast.success("You have been signed out");

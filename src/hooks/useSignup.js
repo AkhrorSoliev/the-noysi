@@ -3,6 +3,7 @@ import { auth, db } from "../firebase/firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useGlobalContext } from "./useGlobalContext";
+import { create } from "motion/react-client";
 
 export function useSignup() {
   const { dispatch } = useGlobalContext();
@@ -27,10 +28,16 @@ export function useSignup() {
         photoURL,
       });
 
+      const coverURL = `https://api.dicebear.com/9.x/glass/svg?seed=${displayName}`;
+
       await setDoc(doc(db, "users", res.user.uid), {
         online: true,
         displayName: res.user.displayName,
         photoURL: res.user.photoURL,
+        coverURL,
+        email: res.user.email,
+        emailVerified: res.user.emailVerified,
+        createdAt: res.user.metadata.createdAt,
       });
 
       if (!isCancelled) {
