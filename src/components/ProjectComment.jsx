@@ -23,7 +23,7 @@ function ProjectComment({ project }) {
       user.uid == createdBy.id ||
       assignedUsersList.find((u) => u.id == user.uid)
     ) {
-      setAllowComment(true);
+      setAllowComment(!completed && true);
     }
 
     if (
@@ -33,7 +33,7 @@ function ProjectComment({ project }) {
     ) {
       setShowComment(true);
     }
-  }, [commentAccess, user, createdBy, assignedUsersList]);
+  }, [commentAccess, user, createdBy, assignedUsersList, completed]);
 
   return (
     <div className="w-1/2 py-5">
