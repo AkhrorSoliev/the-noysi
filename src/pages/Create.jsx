@@ -33,9 +33,9 @@ export const action = async ({ request }) => {
 function Create() {
   const navigate = useNavigate();
   const createActionData = useActionData();
+  const { addDocument } = useFirestore("projects");
   const { user } = useGlobalContext();
   const { document } = useCollection("users");
-  const { addDocument } = useFirestore("projects");
   const [users, setUsers] = useState([]);
   const [assignedUsersList, setAssignedUsersList] = useState(null);
   const [category, setCategory] = useState(null);

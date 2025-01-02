@@ -41,7 +41,6 @@ function Dashboard() {
 
   return (
     <div className="mt-16">
-      <img src={user.photoURL} alt="1111111111111" />
       <h2 className="mb-10 text-3xl font-medium">Dashboard</h2>
       <DashboardFilter changeFilter={changeFilter} />
       {document && <ProjectList projects={projects} />}
